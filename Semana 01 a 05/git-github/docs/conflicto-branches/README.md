@@ -108,11 +108,17 @@ Ahora simularemos que el **Alumno B** empieza a trabajar en paralelo, pero **olv
 
 ## 🛠️ Paso 5: Simular y Resolver el Conflicto en la Terminal
 
-Para enseñarles a tus alumnos cómo se soluciona "por dentro", regresa a tu terminal (asegúrate de estar parado en la `rama-alumno-b`) e intenta fusionar `main` localmente para forzar el choque:
+Para que Git detecte el conflicto de forma local en tu computadora (y puedas ver cómo se ve "por dentro"), primero debemos actualizar la información de GitHub en tu máquina sin tocar tu código actual:
 
-```bash
-git merge main
-```
+1. Trae los cambios recientes de GitHub a tu computadora:
+   ```bash
+   git fetch origin
+   ```
+
+2. Estando parado en tu `rama-alumno-b`, intenta fusionar los cambios de la rama `main` oficial (`origin/main`):
+   ```bash
+   git merge origin/main
+   ```
 
 Git te arrojará este mensaje advirtiendo el problema:
 > `Auto-merging README.md`
@@ -127,12 +133,12 @@ Si abres tu archivo `README.md` en tu editor (como VS Code), verás que Git ha i
 Esta línea fue escrita por el Alumno B 🍌
 =======
 Esta línea fue escrita por el Alumno A 🍎
->>>>>>> main
+>>>>>>> origin/main
 ```
 
 * **`<<<<<<< HEAD`**: Lo que tú escribiste en tu rama (`rama-alumno-b`).
 * **`=======`**: La línea divisoria.
-* **`>>>>>>> main`**: Lo que ya estaba guardado en `main` (Alumno A).
+* **`>>>>>>> origin/main`**: Lo que ya estaba guardado en `main` en GitHub (Alumno A).
 
 ---
 
