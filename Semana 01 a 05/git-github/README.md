@@ -13,7 +13,7 @@ Aquí encontrarás la documentación relacionada con **Git** y **GitHub**.
 ➡️ [branch/README.md](./docs/branch/README.MD)
 
 ## Guía Conflictos entre branches
-➡️ [branch/README.md](./docs/conflicto-branches/README.MD)
+➡️ [branch/README.md](./docs/conflicto-branches/README.md)
 
 
 ##  🌿 Guía para uso de github-desktop
