@@ -77,43 +77,11 @@ Esto sube tu nueva rama al repositorio en GitHub.
 
 ---
 
-## ⚡ Paso 15: Cómo Resolver Conflictos de Merge
 
-A veces, si otra persona modificó la misma línea del mismo archivo en `main`, GitHub no te dejará hacer el merge automáticamente y marcará un **conflicto**.
-
-Para solucionarlo desde tu terminal:
-
-1. Trae los cambios actualizados de la rama principal a tu rama:
-
-```bash
-git pull origin main
-```
-
-2. Abre el archivo en conflicto en tu editor. Verás marcas como estas:
-
-```markdown
-<<<<<<< HEAD
-Línea modificada en la rama main por otra persona.
-=======
-Línea que editaste en tu rama actual.
->>>>>>> agregar-tarea-nueva
-```
-
-3. Modifica el archivo para dejar la versión correcta y elimina las marcas (`<<<<<<<`, `=======`, `>>>>>>>`).
-
-4. Guarda el archivo y sube la solución:
-
-```bash
-git add .
-git commit -m "Resuelvo conflicto de merge"
-git push origin agregar-tarea-nueva
-```
-
-El Pull Request en GitHub se actualizará solo y quedará listo para fusionar.
 
 ---
 
-## ✅ Paso 16: Fusionar (Merge) el Pull Request
+## ✅ Paso 15: Fusionar (Merge) el Pull Request
 
 Un administrador del repositorio puede revisar el PR y, si está bien, hacer clic en **"Merge pull request"** para integrarlo en la rama principal.
 ![alt text](./imagenes/image-2.png)
