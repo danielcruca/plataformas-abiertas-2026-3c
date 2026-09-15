@@ -231,7 +231,7 @@ git log
 
 Por ejemplo, si desea clonar el repositorio de este curso puede hacerlo de la siguiente manera:
 ```bash
-git clone https://github.com/danielcruca/plataformas-abiertas.git
+git clone https://github.com/danielcruca/plataformas-abiertas-2026-3c
 ```
 Aquí el repo ya existe y entonces solo se hace esto.
 
