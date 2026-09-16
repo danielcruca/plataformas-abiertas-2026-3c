@@ -25,10 +25,10 @@ Inicializa Git:
 git init
 ```
 
-Crea un archivo llamado `README.md`:
+Crea un archivo llamado `README.md` con el siguiente titulo:
 
 ```bash
-echo "# Mi proyecto" > README.md
+ "# Mi proyecto"
 ```
 
 Guarda el archivo en Git:
