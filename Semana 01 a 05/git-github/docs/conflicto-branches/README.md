@@ -1,1148 +1,458 @@
+# 💥 Guía práctica: provocar y resolver un conflicto en Git y GitHub
 
-Gemini
-New chat
-Search chats
-Images
-Library
-New notebook
-AB-731 exam prep: Microsoft AI Transformation Leader
-Profesor.
-All notebooks
-Adorno Halloween: Maceta sin tierra
-Guía de Conflictos en Git
-Pintar Mueble De Negro
-A Friendly Greeting
-Beneficios del ciclismo de montaña
-El Diablo según Saramago
-Definición del término menos
-Guía para Conflictos en Git
-Migración de Taplink a GitHub
-Prellenar un campo de entrada
-Automatizar análisis de gastos con IA
-Definición de Cuñado
-Consulta De La Hora Actual
-Pérdida de Tinte en Cuero
-Cómo Cuidar Cuero Negro
-Cómo conservar zanahorias cortadas
-Por qué llevar encendedor sin fumar
-Leer libros de Google en Kindle
-Estuche de Cuero Estilo Gótico
-Geographic Location Quiz
-Song Recommendation
-Certificaciones Azure Rápidas y Modernas
-Matt Mullenweg apartado como CEO
-Crecimiento en estatura a los 30 años
-El milagro en Saramago
-Precio de Bolsas de Basura
-Organización de herramientas para curso
-Playlist Energética para Profesores
-Calendario de Clases para Excel
-Criterios de Evaluación en Mercadeo
-Corrigiendo una cita médica en inglés
-Go Constant Initialization Quiz Solution
-Identidad Divina y Origen de Jesús
-Conversation with Gemini
-# 💥 Resolución de Conflictos en Git y GitHub
+Esta práctica crea un conflicto **de forma reproducible** y permite verlo tanto en GitHub como en la terminal.
 
+> **Importante:** el error de la guía original está en el momento en que se crea `rama-alumno-b`. Si trabajas en la misma carpeta y ya hiciste el merge del Alumno A en `main`, tu `main` local ya conoce ese cambio. Para simular correctamente a dos alumnos, necesitamos mantener una copia local "vieja" de `main` para B mientras GitHub ya tiene el cambio de A.
 
-
-Un conflicto en Git ocurre cuando dos personas (o tú mismo en diferentes ramas) modifican la **misma línea** de un archivo de la misma manera pero con contenido distinto, y Git no sabe cuál versión conservar de forma automática.
-
-
-
-En esta guía aprenderemos a **provocar un conflicto intencional** paso a paso y cómo resolverlo para mostrárselo a tus alumnos de forma sencilla.
-
-
+La forma más sencilla de hacerlo en una sola computadora es usar **dos carpetas locales**, una para cada alumno.
 
 ---
 
+## 🎯 Objetivo
 
+Vamos a terminar con esta situación:
 
-## 🌿 Paso 1: Partir desde la rama principal (`main`)
+```text
+main
+  │
+  └── Alumno A modifica README.md
+          │
+          └── merge a main en GitHub
 
+Alumno B todavía tiene una versión vieja de main
+          │
+          └── modifica LA MISMA línea de README.md
+```
 
+Cuando B intente fusionar su rama con `main`, Git detectará:
 
-Asegúrate de estar en tu rama principal (`main`) y de tenerla actualizada con los últimos cambios de GitHub:
+```text
+CONFLICT (content): Merge conflict in README.md
+```
 
+---
 
+# 🚀 Paso 0: Crear el repositorio
+
+## 0.1 Crear el repositorio en GitHub
+
+Crea un repositorio vacío llamado:
+
+```text
+demo-conflictos
+```
+
+Por ejemplo:
+
+```text
+https://github.com/TU_USUARIO/demo-conflictos.git
+```
+
+No agregues README desde GitHub, porque lo vamos a crear localmente.
+
+---
+
+## 0.2 Crear la carpeta del proyecto
+
+En una terminal:
 
 ```bash
-
-git checkout main
-
-git pull origin main
-
-```
-
-
-
----
-
-
-
-## 🌱 Paso 2: Crear una rama para el primer cambio
-
-
-
-Crea y cámbiate a una nueva rama llamada `rama-alumno-a`:
-
-
-
-```bash
-
-git checkout -b rama-alumno-a
-
-```
-
-
-
----
-
-
-
-## 🧪 Paso 3: Modificar el archivo `README.md` (Alumno A)
-
-
-
-Edita tu archivo `README.md` agregando la siguiente línea al final del archivo:
-
-
-
-```markdown
-
-Esta línea fue escrita por el Alumno A 🍎
-
-```
-
-
-
-Guarda los cambios, haz `add`, `commit` y súbelos a GitHub:
-
-
-
-```bash
-
-git add README.md
-
-git commit -m "Cambio realizado por Alumno A"
-
-git push origin rama-alumno-a
-
-```
-
-
-
----
-
-
-
-## 🔀 Paso 4: Crear un Pull Request y hacer Merge en GitHub
-
-
-
-1. Ve a tu repositorio en [https://github.com](https://github.com).
-
-2. Haz clic en **"Compare & pull request"** para la rama `rama-alumno-a`.
-
-3. Haz clic en **"Create pull request"** y finalmente en **"Merge pull request"** para integrar estos cambios en la rama `main`.
-
-4. ¡Listo! La rama `main` en GitHub ya tiene este cambio.
-
-
-
----
-
-
-
-## 🔄 Paso 5: Volver a `main` local y actualizar
-
-
-
-Vuelve a tu terminal, cámbiate a la rama `main` local y tráete los cambios recién fusionados desde GitHub:
-
-
-
-```bash
-
-git checkout main
-
-git pull origin main
-
-```
-
-
-
----
-
-
-
-## ⚠️ Paso 6: Crear el conflicto intencional
-
-
-
-Ahora simularemos que olvidaste actualizarte o que estás trabajando en paralelo.
-
-
-
-1. Crea y cámbiate a una nueva rama llamada `rama-alumno-b`:
-
-
-
-```bash
-
-git checkout -b rama-alumno-b
-
-```
-
-
-
-2. Vuelve a editar la **misma línea** (o el mismo lugar) del archivo `README.md` donde editó el Alumno A, pero esta vez escribe esto:
-
-
-
-```markdown
-
-Esta línea fue escrita por el Alumno B 🍌
-
-```
-
-
-
-3. Guarda los cambios, haz `add` y `commit` en esta nueva rama:
-
-
-
-```bash
-
-git add README.md
-
-git commit -m "Cambio realizado por Alumno B"
-
-```
-
-
-
-4. Sube esta rama a GitHub:
-
-
-
-```bash
-
-git push origin rama-alumno-b
-
-```
-
-
-
----
-
-
-
-## 🔁 Paso 7: Intentar hacer el Pull Request del Conflicto
-
-
-
-1. Ve a GitHub y crea un Pull Request para la rama `rama-alumno-b`.
-
-2. GitHub te detectará el problema de inmediato y te mostrará un mensaje de advertencia que dice:
-
-   > **"Can't currently merge automatically"** o **"Conflicting files"**.
-
-3. Esto ocurre porque la línea que modificó el Alumno B choca directamente con la que ya había integrado el Alumno A en `main`.
-
-
-
----
-
-
-
-## 🛠️ Paso 8: Resolver el Conflicto en la Terminal
-
-
-
-Para que tus alumnos entiendan cómo se ve un conflicto "por dentro", haz lo siguiente en tu terminal (estando en la rama `rama-alumno-b` o intentando hacer un merge local):
-
-
-
-Si intentamos fusionar `main` dentro de nuestra rama actual para ver el choque:
-
-
-
-```bash
-
-git merge main
-
-```
-
-
-
-Git te advertirá:
-
-> `Auto-merging README.md`
-
-> `CONFLICT (content): Merge conflict in README.md`
-
-> `Automatic merge failed; fix conflicts and then commit the result.`
-
-
-
-Si abres tu archivo `README.md` en tu editor de código (como VS Code), verás las marcas de conflicto que pone Git:
-
-
-
-```markdown
-
-<<<<<<< HEAD
-
-Esta línea fue escrita por el Alumno B 🍌
-
-=======
-
-Esta línea fue escrita por el Alumno Alumno A 🍎
-
->>>>>>> main
-
-```
-
-
-
----
-
-
-
-## 🧹 Paso 9: Limpiar y Decidir qué Queda
-
-
-
-Para solucionar el conflicto, debes borrar las líneas de marcado de Git (`<<<<<<<`, `=======`, `>>>>>>>`) y dejar el texto final que tú decidas conservar (por ejemplo, combinando ambos o eligiendo uno):
-
-
-
-```markdown
-
-Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
-
-```
-
-
-
-Guarda el archivo corregido.
-
-
-
----
-
-
-
-## 💾 Paso 10: Finalizar la Resolución
-
-
-
-Una vez editado y guardado el archivo sin las marcas de conflicto, agrégalo al área de `staging` y haz el `commit` final de resolución:
-
-
-
-```bash
-
-git add README.md
-
-git commit -m "Conflicto resuelto manualmente"
-
-```
-
-
-
-Si estabas haciendo un merge local, con esto finaliza. Si estabas en GitHub, puedes actualizar tu rama o completar el merge en la plataforma web.
-
-
-
----
-
-
-
-## 🔁 Resumen Visual del Conflicto
-
-
-
-```plaintext
-
-main ───────[ Cambio A ]──────────────┐
-
-                                      ▼
-
-rama-B ─────[ Cambio B (conflicto) ]──┼──➤ ¡Conflicto! ──➤ Resolver ──➤ ¡Listo!
-
-```
-
-
-
-mejora esta guia, quiero que venga desde cero, donde creo los branches y todo
-
-Aquí tienes la guía mejorada, estructurada completamente desde cero. Asume que estás iniciando un repositorio nuevo para que tú y tus alumnos puedan replicar todo el flujo paso a paso sin perderse ningún comando.
-
-💥 Guía Completa: Cómo Provocar y Resolver Conflictos en Git y GitHub (Desde Cero)
-Un conflicto en Git ocurre cuando dos ramas modifican la misma línea de un archivo con contenido distinto, y Git no sabe automáticamente cuál versión conservar.
-
-Esta guía te lleva desde la creación del repositorio hasta la resolución manual del conflicto, ideal para proyectar en clase.
-
-🚀 Paso 0: Preparar el repositorio local y remoto
-Si aún no tienes un repositorio de prueba, créalo desde cero en tu terminal:
-
-Bash
-# 1. Crear una carpeta y entrar en ella
 mkdir demo-conflictos
 cd demo-conflictos
+```
 
-# 2. Inicializar Git
+Inicializa Git:
+
+```bash
 git init
+```
 
-# 3. Crear el archivo inicial README.md
+Configura la rama principal como `main`:
+
+```bash
+git branch -M main
+```
+
+Crea el README:
+
+```bash
 echo "# Práctica de Conflictos" > README.md
+```
 
-# 4. Hacer el primer commit
+Haz el primer commit:
+
+```bash
 git add README.md
-git commit -m "Commit inicial: archivo README creado"
-Ahora, conéctalo a un repositorio vacío en tu cuenta de GitHub (reemplaza la URL con la tuya):
+git commit -m "Commit inicial: crea README"
+```
 
-Bash
-git branch -M main
-git remote add origin https://github.com/tu-usuario/demo-conflictos.git
+Conecta el repositorio con GitHub:
+
+```bash
+git remote add origin https://github.com/TU_USUARIO/demo-conflictos.git
+```
+
+Sube `main`:
+
+```bash
 git push -u origin main
-🌱 Paso 1: Crear la rama y el trabajo del "Alumno A"
-Imaginemos que vamos a simular el trabajo del Alumno A.
+```
 
-Crea y cámbiate a una nueva rama llamada rama-alumno-a:
+---
 
-Bash
+# 🍎 Paso 1: Simular al Alumno A
+
+Ahora trabajaremos como si fuéramos el Alumno A.
+
+## 1.1 Crear la rama de A
+
+```bash
 git checkout -b rama-alumno-a
-Edita tu archivo README.md agregando esta línea al final:
+```
 
-Markdown
+Comprueba dónde estás:
+
+```bash
+git branch
+```
+
+Deberías ver:
+
+```text
+* rama-alumno-a
+  main
+```
+
+---
+
+## 1.2 Modificar README.md
+
+Abre `README.md`.
+
+Actualmente debe contener:
+
+```markdown
+# Práctica de Conflictos
+```
+
+Agrega al final:
+
+```markdown
 Esta línea fue escrita por el Alumno A 🍎
-Guarda los cambios, haz add, commit y súbelos a GitHub:
+```
 
-Bash
+El archivo queda:
+
+```markdown
+# Práctica de Conflictos
+Esta línea fue escrita por el Alumno A 🍎
+```
+
+Guarda el archivo.
+
+---
+
+## 1.3 Hacer commit
+
+```bash
 git add README.md
 git commit -m "Agrega línea del Alumno A"
-git push origin rama-alumno-a
-🔀 Paso 2: Integrar el Alumno A a la rama principal (main)
-Ve a tu repositorio en GitHub.
+```
 
-Haz clic en "Compare & pull request" para la rama-alumno-a.
+---
 
-Haz clic en "Create pull request" y luego en "Merge pull request" para fusionarlo con main.
+## 1.4 Subir la rama a GitHub
 
-¡Listo! La rama main en GitHub ya tiene este cambio integrado.
+```bash
+git push -u origin rama-alumno-a
+```
 
-🔄 Paso 3: Sincronizar tu computadora con main
-Vuelve a tu terminal local. Debes asegurarte de bajarte los cambios recientes que subió el Alumno A:
+---
 
-Bash
-# Regresar a la rama main
-git checkout main
+# 🔀 Paso 2: Integrar al Alumno A en `main`
 
-# Traer los cambios actualizados desde GitHub
-git pull origin main
-(En este punto, tu archivo README.md en tu main local ya incluye la contribución del Alumno A).
+Ve al repositorio en GitHub.
 
-⚠️ Paso 4: Crear la rama y el trabajo del "Alumno B" (El Conflicto)
-Ahora simularemos que el Alumno B trabaja en paralelo (o que olvidó actualizar su repositorio antes de empezar a escribir).
+Debería aparecer la opción para crear un Pull Request desde:
 
-Crea y cámbiate a una nueva rama llamada rama-alumno-b (partiendo desde el main actualizado):
+```text
+rama-alumno-a
+```
 
-Bash
-git checkout -b rama-alumno-b
-Abre el archivo README.md y edita exactamente la misma línea donde escribió el Alumno A, pero escribe esto en su lugar:
+Crea el Pull Request y haz:
 
-Markdown
+```text
+Create pull request
+        ↓
+Merge pull request
+        ↓
+Confirm merge
+```
+
+Ahora GitHub tiene:
+
+```text
+main
+│
+└── Esta línea fue escrita por el Alumno A 🍎
+```
+
+---
+
+# ⚠️ Paso 3: Crear correctamente la situación del Alumno B
+
+Aquí está la parte importante.
+
+**No vamos a actualizar el `main` local que estás usando para A.**
+
+En cambio, vamos a crear una **segunda carpeta**, que representa la computadora del Alumno B.
+
+## 3.1 Volver a la carpeta anterior
+
+Primero sal del proyecto:
+
+```bash
+cd ..
+```
+
+Ahora deberías estar en la carpeta que contiene:
+
+```text
+demo-conflictos
+```
+
+---
+
+## 3.2 Crear una segunda copia para B
+
+Clona el repositorio desde GitHub:
+
+```bash
+git clone https://github.com/TU_USUARIO/demo-conflictos.git alumno-b
+```
+
+Entra:
+
+```bash
+cd alumno-b
+```
+
+### ⚠️ Pero hay un detalle
+
+Como GitHub ya contiene el cambio del Alumno A, esta copia **ya estaría actualizada**.
+
+Por eso vamos a retroceder el `main` local de B al commit anterior al cambio de A.
+
+Primero mira el historial:
+
+```bash
+git log --oneline
+```
+
+Verás algo parecido a:
+
+```text
+abc1234 Merge pull request...
+def5678 Agrega línea del Alumno A
+789abcd Commit inicial: crea README
+```
+
+El commit que queremos para B es:
+
+```text
+789abcd Commit inicial: crea README
+```
+
+Copia el identificador del commit inicial.
+
+---
+
+## 3.3 Crear una rama de B desde el `main` viejo
+
+Crea la rama desde ese commit:
+
+```bash
+git checkout -b rama-alumno-b 789abcd
+```
+
+> Reemplaza `789abcd` por el identificador real de tu commit inicial.
+
+Ahora B está trabajando sobre una versión antigua del proyecto.
+
+Comprueba el estado:
+
+```bash
+git status
+```
+
+Y revisa el archivo:
+
+```bash
+cat README.md
+```
+
+Deberías ver solamente:
+
+```markdown
+# Práctica de Conflictos
+```
+
+Esto es exactamente lo que queremos.
+
+---
+
+# 🍌 Paso 4: El Alumno B modifica la misma línea
+
+Abre:
+
+```text
+README.md
+```
+
+B va a agregar una línea en el mismo lugar donde A había agregado la suya.
+
+Escribe:
+
+```markdown
+# Práctica de Conflictos
 Esta línea fue escrita por el Alumno B 🍌
-Guarda los cambios, haz add y commit:
+```
 
-Bash
+Guarda.
+
+---
+
+## 4.1 Hacer commit
+
+```bash
 git add README.md
 git commit -m "Agrega línea del Alumno B"
-Sube esta rama a GitHub:
+```
 
-Bash
-git push origin rama-alumno-b
-🛑 Paso 5: Intentar fusionar en GitHub (Ver el aviso de conflicto)
-Ve a GitHub y haz clic en "Compare & pull request" para la rama-alumno-b.
+---
 
-Verás que GitHub te bloquea el botón de merge y te muestra una advertencia roja:
+## 4.2 Subir la rama de B
 
-"Can't currently merge automatically" o "Conflicting files".
+```bash
+git push -u origin rama-alumno-b
+```
 
-Explicación para tus alumnos: Esto pasa porque la línea que modificó el Alumno B choca directamente con la línea que el Alumno A ya guardó previamente en main.
+Ahora GitHub tiene:
 
-🛠️ Paso 6: Simular y Resolver el Conflicto en la Terminal
-Para mostrarles a tus alumnos cómo se ve un conflicto "por dentro" a nivel de código, regresa a tu terminal (estando parado en la rama-alumno-b) e intenta fusionar main localmente para forzar el choque:
+```text
+main
+│
+└── Alumno A 🍎
 
-Bash
-git merge main
-Git te arrojará este mensaje de advertencia:
+rama-alumno-b
+│
+└── Alumno B 🍌
+```
 
-Auto-merging README.md
-CONFLICT (content): Merge conflict in README.md
-Automatic merge failed; fix conflicts and then commit the result.
+Las dos ramas parten del mismo commit inicial, pero modificaron la misma parte del archivo de manera diferente.
 
-Si abres tu archivo README.md en tu editor de código (como VS Code), verás que Git ha insertado marcas especiales de texto:
+---
 
-Markdown
-# Práctica de Conflictos
-<<<<<<< HEAD
-Esta línea fue escrita por el Alumno B 🍌
-=======
+# 🛑 Paso 5: Crear el Pull Request de B
+
+En GitHub, crea un Pull Request:
+
+```text
+rama-alumno-b → main
+```
+
+Ahora GitHub debería indicar que existen conflictos.
+
+Dependiendo de la interfaz de GitHub, puedes ver mensajes como:
+
+```text
+Can't automatically merge
+```
+
+o:
+
+```text
+This branch has conflicts that must be resolved
+```
+
+Esto ocurre porque Git encuentra:
+
+```text
+main:
 Esta línea fue escrita por el Alumno A 🍎
->>>>>>> main
-<<<<<<< HEAD muestra lo que tú tienes en tu rama actual (rama-alumno-b).
 
-======= es el separador.
-
->>>>>>> main muestra lo que viene de la rama main.
-
-🧹 Paso 7: Limpiar y Decidir qué Queda
-Para solucionar el conflicto, debes borrar por completo las líneas de marcado que puso Git (<<<<<<<, =======, >>>>>>>) y dejar el texto final limpio que desees conservar.
-
-Por ejemplo, puedes unificar ambos aportes editando el archivo para que quede así:
-
-Markdown
-# Práctica de Conflictos
-Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
-Guarda los cambios en el archivo.
-
-💾 Paso 8: Finalizar la Resolución
-Una vez que el archivo está limpio y guardado sin marcas de conflicto, intégralo formalmente al flujo de Git:
-
-Bash
-# 1. Agregar el archivo corregido al área de preparación
-git add README.md
-
-# 2. Hacer el commit de resolución
-git commit -m "Resuelve conflicto manualmente entre Alumno A y B"
-¡Felicidades! El conflicto ha quedado resuelto de manera local. Si deseas subir los cambios ya limpios a GitHub, solo ejecuta:
-
-Bash
-git push origin rama-alumno-b
-Y ahora verás que el Pull Request en GitHub se vuelve color verde y está listo para hacerle Merge.
-
-damela para descargar en md
-
-Ahora, conéctalo a un repositorio vacío en tu cuenta de GitHub (reemplaza la URL con la tuya):
-
-Bash
-git branch -M main
-git remote add origin [https://github.com/tu-usuario/demo-conflictos.git](https://github.com/tu-usuario/demo-conflictos.git)
-git push -u origin main
-🌱 Paso 1: Crear la rama y el trabajo del "Alumno A"
-Imaginemos que vamos a simular el trabajo del Alumno A.
-
-Crea y cámbiate a una nueva rama llamada rama-alumno-a:
-
-Bash
-git checkout -b rama-alumno-a
-Edita tu archivo README.md agregando esta línea al final:
-
-Markdown
-Esta línea fue escrita por el Alumno A 🍎
-Guarda los cambios, haz add, commit y súbelos a GitHub:
-
-Bash
-git add README.md
-git commit -m "Agrega línea del Alumno A"
-git push origin rama-alumno-a
-🔀 Paso 2: Integrar el Alumno A a la rama principal (main)
-Ve a tu repositorio en GitHub.
-
-Haz clic en "Compare & pull request" para la rama-alumno-a.
-
-Haz clic en "Create pull request" y luego en "Merge pull request" para fusionarlo con main.
-
-¡Listo! La rama main en GitHub ya tiene este cambio integrado.
-
-🔄 Paso 3: Sincronizar tu computadora con main
-Vuelve a tu terminal local. Debes asegurarte de bajarte los cambios recientes que subió el Alumno A:
-
-Bash
-# Regresar a la rama main
-git checkout main
-
-# Traer los cambios actualizados desde GitHub
-git pull origin main
-(En este punto, tu archivo README.md en tu main local ya incluye la contribución del Alumno A).
-
-⚠️ Paso 4: Crear la rama y el trabajo del "Alumno B" (El Conflicto)
-Ahora simularemos que el Alumno B trabaja en paralelo (o que olvidó actualizar su repositorio antes de empezar a escribir).
-
-Crea y cámbiate a una nueva rama llamada rama-alumno-b (partiendo desde el main actualizado):
-
-Bash
-git checkout -b rama-alumno-b
-Abre el archivo README.md y edita exactamente la misma línea donde escribió el Alumno A, pero escribe esto en su lugar:
-
-Markdown
+rama-alumno-b:
 Esta línea fue escrita por el Alumno B 🍌
-Guarda los cambios, haz add y commit:
+```
 
-Bash
-git add README.md
-git commit -m "Agrega línea del Alumno B"
-Sube esta rama a GitHub:
+Git no puede decidir automáticamente cuál debe quedar.
 
-Bash
-git push origin rama-alumno-b
-🛑 Paso 5: Intentar fusionar en GitHub (Ver el aviso de conflicto)
-Ve a GitHub y haz clic en "Compare & pull request" para la rama-alumno-b.
+---
 
-Verás que GitHub te bloquea el botón de merge y te muestra una advertencia roja:
+# 🛠️ Paso 6: Resolver el conflicto desde la terminal
 
-"Can't currently merge automatically" o "Conflicting files".
+Ahora vamos a resolverlo manualmente.
 
-Explicación para tus alumnos: Esto pasa porque la línea que modificó el Alumno B choca directamente con la línea que el Alumno A ya guardó previamente en main.
+Seguimos trabajando dentro de la carpeta:
 
-🛠️ Paso 6: Simular y Resolver el Conflicto en la Terminal
-Para mostrarles a tus alumnos cómo se ve un conflicto "por dentro" a nivel de código, regresa a tu terminal (estando parado en la rama-alumno-b) e intenta fusionar main localmente para forzar el choque:
+```text
+alumno-b
+```
 
-Bash
-git merge main
-Git te arrojará este mensaje de advertencia:
+Comprueba que estás en la rama correcta:
 
-Auto-merging README.md
-CONFLICT (content): Merge conflict in README.md
-Automatic merge failed; fix conflicts and then commit the result.
+```bash
+git branch
+```
 
-Si abres tu archivo README.md en tu editor de código (como VS Code), verás que Git ha insertado marcas especiales de texto:
+Debe aparecer:
 
-Markdown
-# Práctica de Conflictos
-<<<<<<< HEAD
-Esta línea fue escrita por el Alumno B 🍌
-=======
-Esta línea fue escrita por el Alumno A 🍎
->>>>>>> main
-<<<<<<< HEAD muestra lo que tú tienes en tu rama actual (rama-alumno-b).
+```text
+* rama-alumno-b
+  main
+```
 
-======= es el separador.
+---
 
->>>>>>> main muestra lo que viene de la rama main.
+## 6.1 Obtener la información más reciente de GitHub
 
-🧹 Paso 7: Limpiar y Decidir qué Queda
-Para solucionar el conflicto, debes borrar por completo las líneas de marcado que puso Git (<<<<<<<, =======, >>>>>>>) y dejar el texto final limpio que desees conservar.
-
-Por ejemplo, puedes unificar ambos aportes editando el archivo para que quede así:
-
-Markdown
-# Práctica de Conflictos
-Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
-Guarda los cambios en el archivo.
-
-💾 Paso 8: Finalizar la Resolución
-Una vez que el archivo está limpio y guardado sin marcas de conflicto, intégralo formalmente al flujo de Git:
-
-Bash
-# 1. Agregar el archivo corregido al área de preparación
-git add README.md
-
-# 2. Hacer el commit de resolución
-git commit -m "Resuelve conflicto manualmente entre Alumno A y B"
-¡Felicidades! El conflicto ha quedado resuelto de manera local. Si deseas subir los cambios ya limpios a GitHub, solo ejecuta:
-
-Bash
-git push origin rama-alumno-b
-Y ahora verás que el Pull Request en GitHub se vuelve color verde y está listo para hacerle Merge.
-"""
-
-file_path = "guia_conflictos_git.md"
-with open(file_path, "w", encoding="utf-8") as f:
-f.write(markdown_content)
-print(f"File saved successfully: {file_path}")
-
-
-```text?code_stdout&code_event_index=1
-File saved successfully: guia_conflictos_git.md
-
-Tu archivo Markdown está listo para descargar:
-
-MD icon
-guia_conflictos_git
- MD 
-git remote add origin https://github.com/danielcruca/demo-conflictos.git
-
-error: remote origin already exists.
-
-Este error ocurre porque Git ya tiene guardado un repositorio remoto con el nombre origin en esa carpeta.
-
-Tienes dos formas de solucionarlo dependiendo de lo que quieras hacer:
-
-Opción 1: Si la URL anterior es incorrecta y quieres cambiarla
-Si quieres reemplazar la URL existente por la nueva, usa el comando set-url:
-
-Bash
-git remote set-url origin https://github.com/danielcruca/demo-conflictos.git
-Opción 2: Si quieres verificar cuál URL tiene guardada actualmente
-Para revisar a dónde apunta origin ahora mismo antes de hacer cambios:
-
-Bash
-git remote -v
-Una vez que ejecutes la Opción 1 (si la URL estaba mal) o verifiques que es la correcta, puedes continuar con el siguiente comando de la guía sin problemas:
-
-Bash
-git push -u origin main
-estaba siguiendo tu guia y en 🛑 Paso 5: Intentar fusionar en GitHub (Ver el aviso de conflicto) el conflicto no sucede
-
-Eso pasa comúnmente en GitHub por una razón lógica: en el Paso 2 ya hiciste merge de la rama-alumno-a hacia main.
-
-Cuando creaste la rama-alumno-b en el Paso 4, lo hiciste desde un main que ya tenía el commit del Alumno A. Por lo tanto, para GitHub no hay un choque real, ya que el historial reconoce que la rama-alumno-b es descendiente directa de ese main y simplemente sobrescribe o acepta el cambio de forma lineal si intentas hacer el PR directamente en la plataforma web sin haber hecho antes el experimento local de choque.
-
-Para forzar y visualizar el conflicto correctamente en GitHub, asegúrate de seguir este flujo alternativo:
-
-¿Cómo provocar el conflicto real para que GitHub lo detecte?
-Vuelve a la rama main local y actualízala:
-
-Bash
-git checkout main
-git pull origin main
-Crea la rama del Alumno A y súbela (pero NO hagas el PR todavía):
-
-Bash
-git checkout -b rama-alumno-a
-# Edita README.md agregando la línea del Alumno A
-git add README.md
-git commit -m "Cambio Alumno A"
-git push origin rama-alumno-a
-Haz el Pull Request y Merge de la rama-alumno-a en GitHub (para que main en la nube se actualice con esto).
-
-Simula al Alumno B creando la rama antes de actualizar tu main local:
-
-Si te cambias a otra rama (rama-alumno-b) sin haber hecho git pull previo en main, tu computadora seguirá pensando que el archivo está en su estado original.
-
-Bash
-git checkout main
-# NO HAGAS git pull aquí para simular que olvidaste actualizarte
-git checkout -b rama-alumno-b
-Edita la misma línea en el README.md con el texto del Alumno B.
-
-Bash
-git add README.md
-git commit -m "Cambio Alumno B"
-git push origin rama-alumno-b
-Ahora sí, ve a GitHub e intenta abrir el Pull Request para la rama-alumno-b. Como main ya tiene el cambio del Alumno A y la rama-alumno-b salió de una versión vieja sin enterarse, GitHub detectará el conflicto de inmediato.
-
-Verificación Rápida
-¿Qué te aparece exactamente en la pantalla de GitHub cuando intentas hacer el Pull Request de la rama-alumno-b ahora mismo?
-
-entonces actualzia la guia y damela para actualizar, ten de contexto que es para estudiantes que esta aprendiendo github y debe de ser facil
-
-Conéctalo a tu repositorio vacío en GitHub (reemplaza con tu URL):
-
-Bash
-git branch -M main
-git remote add origin [https://github.com/danielcruca/demo-conflictos.git](https://github.com/danielcruca/demo-conflictos.git)
-git push -u origin main
-🌱 Paso 1: Simular el trabajo del "Alumno A"
-Imaginemos que el Alumno A crea su propia rama para trabajar:
-
-Crea y cámbiate a la rama rama-alumno-a:
-
-Bash
-git checkout -b rama-alumno-a
-Abre tu archivo README.md y agrega esta línea exactamente al final:
-
-Markdown
-Esta línea fue escrita por el Alumno A 🍎
-Guarda los cambios, haz add, commit y súbela a GitHub:
-
-Bash
-git add README.md
-git commit -m "Agrega línea del Alumno A"
-git push origin rama-alumno-a
-🔀 Paso 2: Integrar el Alumno A a la rama principal (main)
-Ve a tu repositorio en GitHub.
-
-Haz clic en "Compare & pull request" para la rama-alumno-a.
-
-Haz clic en "Create pull request" y luego en "Merge pull request" para fusionarlo con main.
-
-¡Listo! La rama main en GitHub ya tiene este cambio guardado oficialmente.
-
-⚠️ Paso 3: El error clásico del Alumno B (Crear conflicto)
-Ahora simularemos que el Alumno B empieza a trabajar en paralelo, pero olvida actualizar su computadora antes de empezar.
-
-Vuelve a tu terminal y regrésate a la rama main:
-
-Bash
-git checkout main
-(Nota clave: NO ejecutes git pull origin main aquí. Queremos simular que el Alumno B tiene su código desactualizado).
-
-Crea y cámbiate a la nueva rama rama-alumno-b desde ese main viejo:
-
-Bash
-git checkout -b rama-alumno-b
-Abre el archivo README.md. Como tu computadora no sabe que el Alumno A ya escribió ahí, edita exactamente la misma línea del final y escribe esto en su lugar:
-
-Markdown
-Esta línea fue escrita por el Alumno B 🍌
-Guarda los cambios, haz add, commit y súbela a GitHub:
-
-Bash
-git add README.md
-git commit -m "Agrega línea del Alumno B"
-git push origin rama-alumno-b
-🛑 Paso 4: Ver el aviso de conflicto en GitHub
-Ve a GitHub y haz clic en "Compare & pull request" para la rama-alumno-b.
-
-Verás que GitHub te bloquea el botón y te muestra un aviso en rojo que dice:
-
-"Can't currently merge automatically" o "Conflicting files".
-
-Explicación para clase: GitHub detecta que la rama-alumno-b intenta modificar una línea que ya fue alterada en main por el Alumno A. ¡Tenemos un choque!
-
-🛠️ Paso 5: Simular y Resolver el Conflicto en la Terminal
-Para enseñarles a tus alumnos cómo se soluciona "por dentro", regresa a tu terminal (asegúrate de estar parado en la rama-alumno-b) e intenta fusionar main localmente para forzar el choque:
-
-Bash
-git merge main
-Git te arrojará este mensaje advirtiendo el problema:
-
-Auto-merging README.md
-CONFLICT (content): Merge conflict in README.md
-Automatic merge failed; fix conflicts and then commit the result.
-
-Si abres tu archivo README.md en tu editor (como VS Code), verás que Git ha insertado marcas visuales:
-
-Markdown
-# Práctica de Conflictos
-<<<<<<< HEAD
-Esta línea fue escrita por el Alumno B 🍌
-=======
-Esta línea fue escrita por el Alumno A 🍎
->>>>>>> main
-<<<<<<< HEAD: Lo que tú escribiste en tu rama (rama-alumno-b).
-
-=======: La línea divisoria.
-
->>>>>>> main: Lo que ya estaba guardado en main (Alumno A).
-
-🧹 Paso 6: Limpiar y Decidir qué Queda
-Para solucionar el conflicto, edita el archivo manualmente:
-
-Borra por completo las marcas que puso Git (<<<<<<<, =======, >>>>>>>).
-
-Deja el texto final que desees conservar (puedes unificar ambos mensajes):
-
-Markdown
-# Práctica de Conflictos
-Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
-Guarda los cambios en el archivo.
-
-💾 Paso 7: Finalizar la Resolución
-Una vez que el archivo está limpio y guardado, cierra el conflicto registrándolo en Git:
-
-Bash
-# 1. Preparar el archivo corregido
-git add README.md
-
-# 2. Guardar el cambio con un commit de resolución
-git commit -m "Resuelve conflicto manualmente entre Alumno A y B"
-
-# 3. Subir los cambios limpios a GitHub
-git push origin rama-alumno-b
-Vuelve a tu navegador en GitHub: ¡verás que el Pull Request ahora se puso de color verde y está listo para hacerse Merge sin problemas!
-"""
-
-file_path = "guia_conflictos_git.md"
-with open(file_path, "w", encoding="utf-8") as f:
-f.write(updated_markdown)
-print(f"Updated file saved: {file_path}")
-
-
-```text?code_stdout&code_event_index=1
-Updated file saved: guia_conflictos_git.md
-
-Ya ajusté la guía para corregir ese detalle. El problema ocurría porque al hacer git pull antes de crear la segunda rama, el sistema se actualizaba y GitHub no detectaba el choque.
-
-En esta nueva versión omite intencionalmente el git pull antes del Alumno B, lo que recrea de forma perfecta el error humano real ("olvidé actualizarme"), haciendo que GitHub detecte el conflicto exactamente como se espera en una clase.
-
-Puedes descargar tu archivo actualizado aquí:
-
-MD icon
-guia_conflictos_git
- MD 
-🛠️ Paso 5: Simular y Resolver el Conflicto en la Terminal🛠️ Paso 5: Simular y Resolver el Conflicto en la Terminal este paso no lo logro replicar... podrias actualziarlo?
-
-Conéctalo a tu repositorio vacío en GitHub (reemplaza con tu URL):
-
-Bash
-git branch -M main
-git remote add origin [https://github.com/danielcruca/demo-conflictos.git](https://github.com/danielcruca/demo-conflictos.git)
-git push -u origin main
-🌱 Paso 1: Simular el trabajo del "Alumno A"
-Imaginemos que el Alumno A crea su propia rama para trabajar:
-
-Crea y cámbiate a la rama rama-alumno-a:
-
-Bash
-git checkout -b rama-alumno-a
-Abre tu archivo README.md y agrega esta línea exactamente al final:
-
-Markdown
-Esta línea fue escrita por el Alumno A 🍎
-Guarda los cambios, haz add, commit y súbela a GitHub:
-
-Bash
-git add README.md
-git commit -m "Agrega línea del Alumno A"
-git push origin rama-alumno-a
-🔀 Paso 2: Integrar el Alumno A a la rama principal (main)
-Ve a tu repositorio en GitHub.
-
-Haz clic en "Compare & pull request" para la rama-alumno-a.
-
-Haz clic en "Create pull request" y luego en "Merge pull request" para fusionarlo con main.
-
-¡Listo! La rama main en GitHub ya tiene este cambio guardado oficialmente.
-
-⚠️ Paso 3: El error clásico del Alumno B (Crear conflicto)
-Ahora simularemos que el Alumno B empieza a trabajar en paralelo, pero olvida actualizar su computadora antes de empezar.
-
-Vuelve a tu terminal y regrésate a la rama main:
-
-Bash
-git checkout main
-(Nota clave: NO ejecutes git pull origin main aquí. Queremos simular que el Alumno B tiene su código desactualizado).
-
-Crea y cámbiate a la nueva rama rama-alumno-b desde ese main viejo:
-
-Bash
-git checkout -b rama-alumno-b
-Abre el archivo README.md. Como tu computadora no sabe que el Alumno A ya escribió ahí, edita exactamente la misma línea del final y escribe esto en su lugar:
-
-Markdown
-Esta línea fue escrita por el Alumno B 🍌
-Guarda los cambios, haz add, commit y súbela a GitHub:
-
-Bash
-git add README.md
-git commit -m "Agrega línea del Alumno B"
-git push origin rama-alumno-b
-🛑 Paso 4: Ver el aviso de conflicto en GitHub
-Ve a GitHub y haz clic en "Compare & pull request" para la rama-alumno-b.
-
-Verás que GitHub te bloquea el botón y te muestra un aviso en rojo que dice:
-
-"Can't currently merge automatically" or "Conflicting files".
-
-Explicación para clase: GitHub detecta que la rama-alumno-b intenta modificar una línea que ya fue alterada en main por el Alumno A. ¡Tenemos un choque!
-
-🛠️ Paso 5: Simular y Resolver el Conflicto en la Terminal
-Para que Git detecte el conflicto de forma local en tu computadora (y puedas ver cómo se ve "por dentro"), primero debemos actualizar la información de GitHub en tu máquina sin tocar tu código actual:
-
-Trae los cambios recientes de GitHub a tu computadora:
-
-Bash
+```bash
 git fetch origin
-Estando parado en tu rama-alumno-b, intenta fusionar los cambios de la rama main oficial (origin/main):
+```
 
-Bash
+Esto descarga la información de `origin/main`, pero **no modifica tu archivo automáticamente**.
+
+---
+
+## 6.2 Intentar fusionar `main`
+
+Ejecuta:
+
+```bash
 git merge origin/main
-Git te arrojará este mensaje advirtiendo el problema:
+```
 
+Git debería detectar el conflicto y mostrar algo parecido a:
+
+```text
 Auto-merging README.md
 CONFLICT (content): Merge conflict in README.md
 Automatic merge failed; fix conflicts and then commit the result.
-
-Si abres tu archivo README.md en tu editor (como VS Code), verás que Git ha insertado marcas visuales:
-
-Markdown
-# Práctica de Conflictos
-<<<<<<< HEAD
-Esta línea fue escrita por el Alumno B 🍌
-=======
-Esta línea fue escrita por el Alumno A 🍎
->>>>>>> origin/main
-<<<<<<< HEAD: Lo que tú escribiste en tu rama (rama-alumno-b).
-
-=======: La línea divisoria.
-
->>>>>>> origin/main: Lo que ya estaba guardado en main en GitHub (Alumno A).
-
-🧹 Paso 6: Limpiar y Decidir qué Queda
-Para solucionar el conflicto, edita el archivo manualmente:
-
-Borra por completo las marcas que puso Git (<<<<<<<, =======, >>>>>>>).
-
-Deja el texto final que desees conservar (puedes unificar ambos mensajes):
-
-Markdown
-# Práctica de Conflictos
-Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
-Guarda los cambios en el archivo.
-
-💾 Paso 7: Finalizar la Resolución
-Una vez que el archivo está limpio y guardado, cierra el conflicto registrándolo en Git:
-
-Bash
-# 1. Preparar el archivo corregido
-git add README.md
-
-# 2. Guardar el cambio con un commit de resolución
-git commit -m "Resuelve conflicto manualmente entre Alumno A y B"
-
-# 3. Subir los cambios limpios a GitHub
-git push origin rama-alumno-b
-Vuelve a tu navegador en GitHub: ¡verás que el Pull Request ahora se puso de color verde y está listo para hacerse Merge sin problemas!
-"""
-
-with open("guia_conflictos_git_3.md", "w", encoding="utf-8") as f:
-f.write(fixed_markdown)
-print("Updated successfully")
-
-
-```text?code_stdout&code_event_index=1
-Updated successfully
-
-El motivo por el cual no lo podías replicar localmente es muy lógico: cuando estabas en tu rama-alumno-b e intentabas hacer git merge main, tu computadora todavía no sabía que el Alumno A había hecho cambios en GitHub, porque tu rama local main seguía vieja (no habías hecho git pull). Como tu máquina no tenía constancia de esos cambios, Git simplemente pensaba que no había nada con qué chocar.
-
-Para solucionar esto de forma limpia y directa, en lugar de usar git merge main, debemos usar git fetch origin y luego git merge origin/main. Esto le avisa a tu computadora: "Tráeme lo que hay en el servidor de GitHub para compararlo con mi rama actual", lo que fuerza el conflicto de inmediato de manera local.
-
-Ya actualicé la guía completa. Aquí la tienes corregida y lista para descargar:
-
-MD icon
-guia_conflictos_git_3
- MD 
-
-
-
-Gemini is AI and can make mistakes.
-
-Analyzing
-# 💥 Guía Completa: Cómo Provocar y Resolver Conflictos en Git y GitHub (Desde Cero)
-
-Un conflicto en Git ocurre cuando dos ramas modifican la **misma línea** de un archivo con contenido distinto, y Git no sabe automáticamente cuál versión conservar. 
-
-Esta guía está diseñada paso a paso para estudiantes que están aprendiendo GitHub, simulando un escenario real de trabajo en equipo donde un despiste provoca un choque.
-
----
-
-## 🚀 Paso 0: Preparar el repositorio local y remoto
-
-Crea tu repositorio de prueba desde cero en tu terminal:
-
-```bash
-# 1. Crear una carpeta y entrar en ella
-mkdir demo-conflictos
-cd demo-conflictos
-
-# 2. Inicializar Git
-git init
-
-# 3. Crear el archivo inicial README.md
-echo "# Práctica de Conflictos" > README.md
-
-# 4. Hacer el primer commit
-git add README.md
-git commit -m "Commit inicial: archivo README creado"
 ```
 
-Conéctalo a tu repositorio vacío en GitHub (reemplaza con tu URL):
+🎉 **El conflicto ya está creado localmente.**
 
-```bash
-git branch -M main
-git remote add origin https://github.com/danielcruca/demo-conflictos.git
-git push -u origin main
+---
+
+# 🔍 Paso 7: Ver el conflicto
+
+Abre:
+
+```text
+README.md
 ```
 
----
-
-## 🌱 Paso 1: Simular el trabajo del "Alumno A"
-
-Imaginemos que el Alumno A crea su propia rama para trabajar:
-
-1. Crea y cámbiate a la rama `rama-alumno-a`:
-   ```bash
-   git checkout -b rama-alumno-a
-   ```
-
-2. Abre tu archivo `README.md` y agrega esta línea exactamente **al final**:
-   ```markdown
-   Esta línea fue escrita por el Alumno A 🍎
-   ```
-
-3. Guarda los cambios, haz `add`, `commit` y súbela a GitHub:
-   ```bash
-   git add README.md
-   git commit -m "Agrega línea del Alumno A"
-   git push origin rama-alumno-a
-   ```
-
----
-
-## 🔀 Paso 2: Integrar el Alumno A a la rama principal (`main`)
-
-1. Ve a tu repositorio en [GitHub](https://github.com).
-2. Haz clic en **"Compare & pull request"** para la `rama-alumno-a`.
-3. Haz clic en **"Create pull request"** y luego en **"Merge pull request"** para fusionarlo con `main`.
-4. ¡Listo! La rama `main` en GitHub ya tiene este cambio guardado oficialmente.
-
----
-
-## ⚠️ Paso 3: El error clásico del Alumno B (Crear conflicto)
-
-Ahora simularemos que el **Alumno B** empieza a trabajar en paralelo, pero **olvida actualizar su computadora** antes de empezar.
-
-1. Vuelve a tu terminal y regrésate a la rama `main`:
-   ```bash
-   git checkout main
-   ```
-   *(Nota clave: **NO** ejecutes `git pull origin main` aquí. Queremos simular que el Alumno B tiene su código desactualizado).*
-
-2. Crea y cámbiate a la nueva rama `rama-alumno-b` desde ese `main` viejo:
-   ```bash
-   git checkout -b rama-alumno-b
-   ```
-
-3. Abre el archivo `README.md`. Como tu computadora no sabe que el Alumno A ya escribió ahí, edita **exactamente la misma línea** del final y escribe esto en su lugar:
-   ```markdown
-   Esta línea fue escrita por el Alumno B 🍌
-   ```
-
-4. Guarda los cambios, haz `add`, `commit` y súbela a GitHub:
-   ```bash
-   git add README.md
-   git commit -m "Agrega línea del Alumno B"
-   git push origin rama-alumno-b
-   ```
-
----
-
-## 🛑 Paso 4: Ver el aviso de conflicto en GitHub
-
-1. Ve a GitHub y haz clic en **"Compare & pull request"** para la `rama-alumno-b`.
-2. Verás que GitHub te bloquea el botón y te muestra un aviso en rojo que dice:
-   > **"Can't currently merge automatically"** or **"Conflicting files"**.
-3. **Explicación para clase:** GitHub detecta que la `rama-alumno-b` intenta modificar una línea que ya fue alterada en `main` por el Alumno A. ¡Tenemos un choque!
-
----
-
-## 🛠️ Paso 5: Simular y Resolver el Conflicto en la Terminal
-
-Para que Git detecte el conflicto de forma local en tu computadora (y puedas ver cómo se ve "por dentro"), primero debemos actualizar la información de GitHub en tu máquina sin tocar tu código actual:
-
-1. Trae los cambios recientes de GitHub a tu computadora:
-   ```bash
-   git fetch origin
-   ```
-
-2. Estando parado en tu `rama-alumno-b`, intenta fusionar los cambios de la rama `main` oficial (`origin/main`):
-   ```bash
-   git merge origin/main
-   ```
-
-Git te arrojará este mensaje advirtiendo el problema:
-> `Auto-merging README.md`
-> `CONFLICT (content): Merge conflict in README.md`
-> `Automatic merge failed; fix conflicts and then commit the result.`
-
-Si abres tu archivo `README.md` en tu editor (como VS Code), verás que Git ha insertado marcas visuales:
+Ahora probablemente encontrarás:
 
 ```markdown
 # Práctica de Conflictos
@@ -1153,42 +463,269 @@ Esta línea fue escrita por el Alumno A 🍎
 >>>>>>> origin/main
 ```
 
-* **`<<<<<<< HEAD`**: Lo que tú escribiste en tu rama (`rama-alumno-b`).
-* **`=======`**: La línea divisoria.
-* **`>>>>>>> origin/main`**: Lo que ya estaba guardado en `main` en GitHub (Alumno A).
+Estas marcas fueron agregadas temporalmente por Git.
+
+### `<<<<<<< HEAD`
+
+Indica la versión de tu rama actual:
+
+```text
+rama-alumno-b
+```
+
+Por eso aparece:
+
+```text
+Esta línea fue escrita por el Alumno B 🍌
+```
+
+### `=======`
+
+Es el separador entre las dos versiones.
+
+### `>>>>>>> origin/main`
+
+Indica la versión proveniente de:
+
+```text
+origin/main
+```
+
+En este caso:
+
+```text
+Esta línea fue escrita por el Alumno A 🍎
+```
 
 ---
 
-## 🧹 Paso 6: Limpiar y Decidir qué Queda
+# 🧹 Paso 8: Resolver el conflicto
 
-Para solucionar el conflicto, edita el archivo manualmente:
-1. **Borra por completo** las marcas que puso Git (`<<<<<<<`, `=======`, `>>>>>>>`).
-2. Deja el texto final que desees conservar (puedes unificar ambos mensajes):
+Git no decide por nosotros.
+
+Nosotros debemos editar el archivo.
+
+Por ejemplo, podemos decidir conservar ambas contribuciones:
 
 ```markdown
 # Práctica de Conflictos
 Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
 ```
 
-Guarda los cambios en el archivo.
+Lo importante es eliminar completamente las marcas:
+
+```text
+<<<<<<<
+=======
+>>>>>>>
+```
+
+El archivo debe quedar como Markdown normal.
 
 ---
 
-## 💾 Paso 7: Finalizar la Resolución
+# 💾 Paso 9: Finalizar la resolución
 
-Una vez que el archivo está limpio y guardado, cierra el conflicto registrándolo en Git:
+Primero dile a Git que ya resolviste el archivo:
 
 ```bash
-# 1. Preparar el archivo corregido
 git add README.md
+```
 
-# 2. Guardar el cambio con un commit de resolución
-git commit -m "Resuelve conflicto manualmente entre Alumno A y B"
+Comprueba el estado:
 
-# 3. Subir los cambios limpios a GitHub
+```bash
+git status
+```
+
+Git debería indicar que el conflicto fue resuelto y que queda completar el merge.
+
+Ahora crea el commit:
+
+```bash
+git commit -m "Resuelve conflicto entre Alumno A y B"
+```
+
+---
+
+# 🚀 Paso 10: Subir la resolución a GitHub
+
+```bash
 git push origin rama-alumno-b
 ```
 
-Vuelve a tu navegador en GitHub: ¡verás que el Pull Request ahora se puso de color verde y está listo para hacerse *Merge* sin problemas!
-guia_conflictos_git_3.md
-Displaying guia_conflictos_git_3.md.
+Vuelve al Pull Request de GitHub.
+
+El Pull Request debería actualizarse automáticamente.
+
+Ahora GitHub debería permitir hacer el merge porque el conflicto ya fue resuelto.
+
+Puedes hacer:
+
+```text
+Merge pull request
+        ↓
+Confirm merge
+```
+
+---
+
+# 🧠 ¿Qué ocurrió realmente?
+
+La historia puede visualizarse así:
+
+```text
+                 ┌── rama-alumno-a
+                 │
+                 │   🍎 cambio de A
+                 │
+Commit inicial ──┤
+                 │
+                 │   🍌 cambio de B
+                 │
+                 └── rama-alumno-b
+```
+
+Después:
+
+```text
+             main
+              │
+              │ 🍎
+              ▼
+        cambio de A
+
+
+rama-alumno-b
+      │
+      │ 🍌
+      ▼
+cambio de B
+```
+
+Cuando intentamos hacer:
+
+```bash
+git merge origin/main
+```
+
+Git encuentra dos cambios diferentes sobre la misma parte del archivo.
+
+Por eso necesita nuestra decisión.
+
+---
+
+# 🎓 Concepto clave para los estudiantes
+
+Un conflicto **no significa que Git esté roto**.
+
+Significa:
+
+> **Git encontró dos versiones incompatibles de una misma parte del proyecto y necesita que una persona decida cómo combinarlas.**
+
+El flujo profesional suele ser:
+
+```text
+Modificar código
+      ↓
+commit
+      ↓
+push
+      ↓
+Pull Request
+      ↓
+¿Hay conflicto?
+   ↙       ↘
+ NO         SÍ
+ ↓           ↓
+Merge     Resolver
+             ↓
+           add
+             ↓
+          commit
+             ↓
+           push
+             ↓
+           Merge
+```
+
+---
+
+# 🧪 Comandos utilizados
+
+| Comando | Propósito |
+|---|---|
+| `git init` | Inicializa un repositorio |
+| `git clone` | Crea una copia del repositorio |
+| `git branch` | Muestra las ramas |
+| `git checkout -b` | Crea y cambia a una rama |
+| `git add` | Prepara cambios |
+| `git commit` | Guarda cambios en el historial |
+| `git push` | Sube cambios a GitHub |
+| `git fetch` | Actualiza la información remota sin fusionarla |
+| `git merge` | Intenta combinar dos historiales |
+| `git status` | Muestra el estado del repositorio |
+| `git log --oneline` | Muestra el historial resumido |
+
+---
+
+# 🚨 Si te quedas atrapado durante el conflicto
+
+Si quieres cancelar el merge y volver al estado anterior:
+
+```bash
+git merge --abort
+```
+
+Esto es especialmente útil durante una práctica.
+
+---
+
+# ✅ Resultado final
+
+Al terminar, `main` debería contener:
+
+```markdown
+# Práctica de Conflictos
+Esta línea fue escrita por el Alumno A y el Alumno B en equipo 🚀
+```
+
+Y habrás practicado el flujo completo:
+
+```text
+Ramas
+  ↓
+Commit
+  ↓
+Push
+  ↓
+Pull Request
+  ↓
+Conflicto
+  ↓
+Fetch
+  ↓
+Merge
+  ↓
+Resolver manualmente
+  ↓
+Commit
+  ↓
+Push
+  ↓
+Merge
+```
+
+## 💡 Nota para el profesor
+
+La clave de esta práctica es **usar dos carpetas locales**. Esto representa mejor el escenario real:
+
+```text
+Computadora del Alumno A
+        ↓
+       GitHub
+        ↑
+Computadora del Alumno B
+```
+
+Así se evita el problema de intentar simular dos computadoras dentro de un único `main` local ya actualizado.
