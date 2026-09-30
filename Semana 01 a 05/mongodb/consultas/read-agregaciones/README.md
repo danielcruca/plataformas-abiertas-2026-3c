@@ -163,6 +163,7 @@ db.ventas.aggregate([
 ]);
 
 ```
+![alt text](lookup-query.png)
 
 ---
 
