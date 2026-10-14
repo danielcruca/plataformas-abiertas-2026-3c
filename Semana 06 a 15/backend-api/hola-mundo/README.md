@@ -65,20 +65,21 @@ def create_app():
 
 ### `holamundo.py` (controller)
 ```python
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 
 holamundo_endpoints = Blueprint('holamundo_endpoints', __name__)
 
+
 @holamundo_endpoints.route('/holamundo', methods=['GET'])
-def obtener_ventas():
-    holaMundo = "hola mundo"
-    return jsonify(holaMundo), 200
+def holamundo():
+    return jsonify({"message": "¡Hola, mundo!"}), 200
+
 
 @holamundo_endpoints.route('/saludo', methods=['GET'])
 def saludar():
-    nombre = request.args.get('nombre')
-    apellido = request.args.get('apellido')
-
+    data = request.get_json()
+    nombre = data.get('nombre')
+    apellido = data.get('apellido')
     if not nombre or not apellido:
         return jsonify({'error': 'Faltan parámetros nombre o apellido'}), 400
 
