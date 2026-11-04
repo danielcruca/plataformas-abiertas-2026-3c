@@ -4,11 +4,23 @@ Esta guía explica paso a paso cómo configurar y utilizar un entorno virtual de
 
 ---
 
+## 🌟 ¿Por qué usar un Entorno Virtual? (Ventajas)
+
+Instalar librerías de forma global (directamente en tu sistema operativo) puede traer varios problemas a medida que desarrollas más proyectos. Usar `venv` ofrece importantes beneficios:
+
+1. **Aislamiento de Dependencias:** Evita que proyectos distintos interfieran entre sí. Si un proyecto usa `Flask 2.0` y otro requiere `Flask 3.0`, el entorno virtual permite que ambos coexistan en el mismo equipo sin conflictos.
+2. **Entorno Limpio y Reproducible:** Garantiza que cualquier persona (compañeros de equipo o profesores) ejecute el proyecto con exactamente las mismas versiones de las librerías mediante el archivo `requirements.txt`.
+3. **Evita Problemas de Permisos:** No necesitas permisos de administrador o `sudo` para instalar paquetes, ya que todo se instala dentro de la carpeta local de tu proyecto.
+4. **Despliegue y Producción Facilitados:** Facilita llevar la aplicación a servidores en la nube (Docker, AWS, Render, Heroku) asegurando que no se instalen paquetes innecesarios del sistema.
+
+---
+
 ## 📋 Pre-requisitos
 
 Antes de comenzar, asegúrate de tener instalado **Python 3.x** en tu sistema y de contar con el archivo `requirements.txt` en la raíz de la carpeta de ejecución de tu proyecto.
 
 ### Archivo `requirements.txt`
+
 Tu proyecto debe incluir este archivo con las dependencias necesarias:
 
 ```text
@@ -32,27 +44,26 @@ Abre tu terminal (PowerShell, CMD o Terminal de VS Code) y navega hasta la carpe
 python -m venv venv
 ```
 
-> **¿Qué hace este comando?** Crea una carpeta oculta o local llamada `venv` que contendrá una copia independiente de ejecutable de Python y sus paquetes.
-
----
+> **¿Qué hace este comando?** Crea una carpeta llamada `venv` que contendrá una copia independiente del ejecutable de Python y sus paquetes.
 
 ### 2. Activación del Entorno Virtual
 
 Para que los comandos de Python y `pip` utilicen la carpeta aislada que acabamos de crear, debemos activar el entorno virtual.
 
 #### 🪟 En Windows (PowerShell / CMD)
+
 ```bash
 venv\Scripts\activate
 ```
 
-> 💡 **Nota en Windows:** Si al ejecutar el comando en PowerShell obtienes un error sobre la "ejecución de scripts desactivada", ejecuta PowerShell como administrador y corre: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+> 💡 **Nota en Windows:** Si al ejecutar el comando en PowerShell obtienes un error sobre la "ejecución de scripts desactivada", ejecuta PowerShell como administrador y corre:  
+> `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 #### 🍎 / 🐧 En macOS / Linux
+
 ```bash
 source venv/bin/activate
 ```
-
----
 
 ### 3. Instalación de Dependencias
 
@@ -73,6 +84,7 @@ Con el entorno activo y las dependencias instaladas, puedes iniciar tu servidor 
 ```bash
 python run.py
 ```
+
 *(O usando `py run.py` en Windows)*
 
 ---
